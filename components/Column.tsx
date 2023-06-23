@@ -13,7 +13,7 @@ const idToColumnText: {
   [key in TypedColumn]: string;
 } = {
   todo: "To Do",
-  Inprogress: "In Progress Man!",
+  Inprogress: "In Progress",
   done: "Done",
 };
 
@@ -32,7 +32,7 @@ function Column({ id, todos, index }: Props) {
                 {...provided.droppableProps}
                 ref={provided.innerRef}
                 className={`p-2 rounded-2xl shadow-sm ${
-                  snapshot.isDraggingOver ? "bg-green-200" : "bg-white/50"
+                  snapshot.isDraggingOver ? "bg-purple-300" : "bg-white/50"
                 }`}
               >
                 <h2 className="flex justify-between font-bold text-xl p-2">
