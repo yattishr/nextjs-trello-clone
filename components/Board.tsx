@@ -5,9 +5,10 @@ import { DragDropContext, DropResult, Droppable } from "react-beautiful-dnd";
 import Column from "./Column";
 
 function Board() {
-  const [board, getBoard] = useBoardStore((state) => [
+  const [board, getBoard, setBoardState] = useBoardStore((state) => [
     state.board,
     state.getBoard,
+    state.setBoardState,
   ]);
 
   // Sonny Saangha useEffect Hooks on YouTube
@@ -16,7 +17,21 @@ function Board() {
   }, [getBoard]);
 
   const handleOnDragEnd = (result: DropResult) => {
+    const {destination, source, type } = result;
 
+    // check if the user dragged a card outside of the board
+    if(!destination) return;
+   
+    // Handle a column drag
+    if(type==="column") {
+      const entries = Array.from(board.columns.entries())
+      const [removed] = entries.splice(source.index, 1) // remove the column (Splice) from one array
+      entries.splice(destination.index, 0, removed)
+      const rearrangedColumns = new Map(entries);
+      setBoardState({
+        ...board, columns: rearrangedColumns
+      })
+    }
   }
 
   return (
