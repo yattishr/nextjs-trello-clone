@@ -1,22 +1,44 @@
-'use client' // convert component to a client component.
+"use client"; // convert component to a client component.
 
 import Image from "next/image";
 import { MagnifyingGlassIcon, UserCircleIcon } from "@heroicons/react/24/solid";
 import Avatar from "react-avatar";
 import { useBoardStore } from "@/store/BoardStore";
+import { useEffect, useState } from "react";
+import fetchSuggestion from "@/lib/fetchSuggestion";
 
 function Header() {
-  const [searchString, setSearchString] = useBoardStore((state) => [
+  const [board, searchString, setSearchString] = useBoardStore((state) => [
+    state.board,
     state.searchString,
     state.setSearchString,
-  ])
+  ]);
+
+  // set some local state values.
+  const [loading, setLoading] = useState<boolean>(false);
+  const [suggestion, setSuggestion] = useState<string>("");
+
+  useEffect(() => {
+    // if there is no data yet on the board.
+    if (board.columns.size === 0) return;
+    setLoading(true);
+
+    // fetch Suggestions
+    const fetchSuggestionFunc = async () => {
+      const suggestion = await fetchSuggestion(board);
+      setSuggestion(suggestion);
+      setLoading(false);
+    };
+
+    fetchSuggestionFunc();
+  }, [board]);
 
   return (
     <header>
       <div className="flex flex-col md:flex-row items-center p-5 bg-gray-500/30 rounded-b-2xl">
-
         {/* Hidden div tag */}
-        <div className="
+        <div
+          className="
         absolute 
         top-0
         left-0
@@ -30,9 +52,8 @@ function Header() {
         blur-3xl
         opacity-50
         -z-50
-        "/>
-      
-        
+        "
+        />
 
         <Image
           src="https://upload.wikimedia.org/wikipedia/en/thumb/8/8c/Trello_logo.svg/1280px-Trello_logo.svg.png"
@@ -62,13 +83,18 @@ function Header() {
         </div>
       </div>
 
-    <div className="flex items-center justify-center px-5 py-5 md:py-5">
-      <p className="flex items-center p-5 text-sm font-light pr-5 shadow-xl rounded-xl w-fit bg-white italic max-w-3xl text-[#0055D1]">
-        <UserCircleIcon className="inline-block h-10 w-10 text-sky-700 mr-1" />
-        Message: GPT is summarizing your day...
-      </p>
-    </div>
-
+      <div className="flex items-center justify-center px-5 py-5 md:py-5">
+        <p className="flex items-center p-5 text-sm font-light pr-5 shadow-xl rounded-xl w-fit bg-white italic max-w-3xl text-[#0055D1]">
+          <UserCircleIcon
+            className={`inline-block h-10 w-10 text-sky-700 mr-1 ${
+              loading && "animate-spin"
+            }`}
+          />
+          {suggestion && !loading
+            ? suggestion
+            : "System: GPT is summarizing your tasks..."}
+        </p>
+      </div>
     </header>
   );
 }
