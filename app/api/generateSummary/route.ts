@@ -21,7 +21,7 @@ export async function POST(request: Request) {
         role: "user",
         content: `Hi there, provide a summary of the following todos. Count how many todos are in each category 
         such as To do, in progress and done, then tell the user to have a productive day! 
-        Here's the data: ${JSON.stringify(todos)}`,
+        Here's the data: ${JSON.stringify(todos)} tasks`,
       },
     ],
   });
