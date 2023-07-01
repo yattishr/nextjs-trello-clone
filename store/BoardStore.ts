@@ -7,6 +7,14 @@ interface BoardState {
   getBoard: () => Promise<void>;
   setBoardState: (board: Board) => void;
   updateTodoInDB: (todo: Todo, columnId: TypedColumn) => void;
+  
+  // state variables for Modal dialog
+  newTaskInput: string;
+  setNewTaskInput: (input: string) => void;
+
+  // state variables for Modal Dialog
+  newTaskType: TypedColumn,
+  setNewTaskType: (columnId: TypedColumn) => void;
 
   // search string params
   searchString: string;
@@ -21,9 +29,17 @@ export const useBoardStore = create<BoardState>((set, get) => ({
     columns: new Map<TypedColumn, Column>(),
   },
 
-  // initialize searchString with blank val
+  // initialize searchString with blank val.
   searchString: "",
   setSearchString: (searchString) => set({ searchString }),
+
+  // state values for dialog modal.
+  newTaskInput: "",
+  setNewTaskInput: (input: string) => set({ newTaskInput: input }),
+
+  // state values for dialog modal.
+  newTaskType: "todo",
+  setNewTaskType: (columnId: TypedColumn) => set({newTaskType: columnId}),
 
   getBoard: async () => {
     const board = await getTodosGroupedByColumn();
