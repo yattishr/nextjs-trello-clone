@@ -12,7 +12,7 @@ const types = [
     color: "bg-red-500",
   },
   {
-    id: "inprogress",
+    id: "Inprogress",
     name: "In Progress",
     description: "A task that is currently being worked on",
     color: "bg-yellow-500",

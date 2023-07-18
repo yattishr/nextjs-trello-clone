@@ -44,7 +44,7 @@ export const useBoardStore = create<BoardState>((set, get) => ({
   // initial state values for dialog modal.
   newTaskInput: "",
   setNewTaskInput: (input: string) => set({ newTaskInput: input }),
-
+  
   // initial state values for dialog modal.
   newTaskType: "todo",
   setNewTaskType: (columnId: TypedColumn) => set({ newTaskType: columnId }),
